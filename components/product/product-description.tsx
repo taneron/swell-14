@@ -3,6 +3,7 @@ import Price from 'components/price';
 import Prose from 'components/prose';
 import { ProductFragment } from 'lib/swell/__generated__/graphql';
 import { VariantSelector } from './variant-selector';
+import { Suspense } from 'react';
 
 export function ProductDescription({ product }: { product: ProductFragment }) {
   return (
@@ -16,8 +17,10 @@ export function ProductDescription({ product }: { product: ProductFragment }) {
           />
         </div>
       </div>
-      <VariantSelector options={product.options} variants={product.variants.results} stockPurchasable={product.stockTracking === false || product.stockPurchasable}
-/>
+      <Suspense fallback={null}>
+        <VariantSelector options={product.options} variants={product.variants.results} stockPurchasable={product.stockTracking === false || product.stockPurchasable}
+        />
+      </Suspense>
 
       {product.description ? (
         <Prose
@@ -26,7 +29,9 @@ export function ProductDescription({ product }: { product: ProductFragment }) {
         />
       ) : null}
 
-      <AddToCart product={product} availableForSale={product.stockTracking === false || product.stockPurchasable} />
+      <Suspense fallback={null}>
+        <AddToCart product={product} availableForSale={product.stockTracking === false || product.stockPurchasable} />
+      </Suspense>
     </>
   );
 }
